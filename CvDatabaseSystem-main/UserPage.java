@@ -14,7 +14,7 @@ public class UserPage {
 
     public void searchCVs(String keywords, String education) {
 
-    }
+        }
 
 
     public void viewCV(String otherUsername) {
@@ -23,19 +23,22 @@ public class UserPage {
 
     public void importCV(String filePath) {
 
-    }
+        }
 
 
-    public void writeCV(String name, String education, String skills, String experience) {
+
+    public void writeCV(String name,  String education, String skills, String experience) {
 
 
-    }
+        }
+
+
 
 
     public void editCV(String name, String education, String skills, String experience) {
 
 
-    }
+        }
 }
 
 
