@@ -12,7 +12,7 @@ public class CV<AnyType> {
     private void setName(String name){
         this.name=name;
     }
-    private String getName() {return name;}
+    protected String getName() {return name;}
 
     private void setID(int id){
         if (ID<1)
