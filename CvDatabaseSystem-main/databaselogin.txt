@@ -1,0 +1,57 @@
+import java.sql.*;
+
+public class Login {
+  // Connection details for the database
+  private static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
+  private static final String DB_URL = "jdbc:mysql://localhost/cv_database";
+  private static final String USER = "username";
+  private static final String PASS = "password";
+
+  public static void main(String[] args) {
+    // Connect to the database
+    Connection conn = null;
+    try {
+      Class.forName(JDBC_DRIVER);
+      conn = DriverManager.getConnection(DB_URL, USER, PASS);
+    } catch (ClassNotFoundException | SQLException e) {
+      e.printStackTrace();
+      return;
+    }
+
+    // Check the login information provided by the user
+    String username = ""; // Get the username from the login form
+    String password = ""; // Get the password from the login form
+    String accountType = ""; // Will be set to "admin" or "user" based on the login information
+    try {
+      // Create a statement to execute a SELECT query
+      Statement stmt = conn.createStatement();
+      // Check the admin table for a matching username and password
+      ResultSet rs = stmt.executeQuery("SELECT * FROM admin WHERE username='" + username + "' AND password='" + password + "'");
+      if (rs.next()) {
+        // A matching record was found, so the user is an admin
+        accountType = "admin";
+      } else {
+        // No matching record was found in the admin table, so check the user table
+        rs = stmt.executeQuery("SELECT * FROM user WHERE username='" + username + "' AND password='" + password + "'");
+        if (rs.next()) {
+          // A matching record was found, so the user is a regular user
+          accountType = "user";
+        } else {
+          // No matching record was found in either table, so the login information is invalid
+          System.out.println("Invalid username or password.");
+          return;
+        }
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+      return;
+    }
+
+    // Redirect the user to the appropriate page based on their account type
+    if (accountType.equals("admin")) {
+      // Show the admin page
+    } else if (accountType.equals("user")) {
+      // Show the user page
+    }
+  }
+}
