@@ -1,6 +1,6 @@
 import java.util.Comparator;
 
-public class AlphabeticalComparator implements Comparator<CV> {
+class AlphabeticalComparator implements Comparator<CV> {
     @Override
     public int compare(CV cv1, CV cv2) {
         return cv1.getName().compareToIgnoreCase(cv2.getName());

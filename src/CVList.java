@@ -27,15 +27,7 @@ public class CVList {
         return null;
     }
 
-    public List<CV> search(String query) {
-        List<CV> searchResults = new ArrayList<>();
-        for (CV cv : cvs) {
-            if (cv.matchesQuery(query)) {
-                searchResults.add(cv);
-            }
-        }
-        return searchResults;
-    }
+
 
     public void sortAlphabetically() {
         Collections.sort(cvs, new AlphabeticalComparator());
