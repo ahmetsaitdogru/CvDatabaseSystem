@@ -1,35 +1,95 @@
 import java.sql.*; //burayı database
 import java.sql.PreparedStatement;
 import java.util.Scanner;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+
 
 public class Main {
 
 
     public static void main(String[] args) {
+
         String url= "jdbc:sqlite:D://sqlitedb/CvDatabase.db";
         Connection conn = null;
+
+        JFrame f = new JFrame ("Menü");
+        JMenuBar mb = new JMenuBar () ;
+        JMenu menu = new JMenu("Fİle");
+        JMenu submenu = new JMenu ("Alt menü");
+
+
+
+        JMenuItem i1 = new JMenuItem("CreateCV");
+        JMenuItem i2 = new JMenuItem("İmportCV");
+        JMenuItem i3 = new JMenuItem("WriteCV");
+        JMenuItem i4 = new JMenuItem("ExportCV");
+
+        i1.addActionListener(new ActionListener () {
+            public void actionPerformed1(ActionEvent arg0) {
+
+                JOptionPane.showMessageDialog(f, "Menüye Tıklandı");
+
+            }
+
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        } );
+
+        JMenuItem a1 = new JMenuItem ("ALtmenü 1");
+        JMenuItem a2 = new JMenuItem ("Altmenu 2");
+        submenu.add(a1);
+        submenu.add(a2);
+
+        menu.add(i1);
+        menu.add(i2);
+        menu.add(i3);
+        menu.add(i4);
+        mb.add(menu);
+        f.setJMenuBar(mb);
+        f.setSize(400,400);
+        f.setLayout(null);
+        f.setVisible(true);
+
+
+
 
         try {
             conn = DriverManager.getConnection(url);
             System.out.println("Connected");
 
-          //  conn = DriverManager.getConnection(DB_URL, USER, PASS);
+
         } catch ( SQLException e) {
             System.out.println(e.getMessage());
             return;
         }
 
-        String username = "";
-        String password = "";
-        String accountType = "";
 
 
 
 
-        //insertCV(conn, "John Doe", 2, "flying", "non","highschool",null);
+        insertCV(conn, "zilan", 4, "asda", "asdd","highasdasdaschool","asdasd");
+
+
+
+
+        insertCV(conn, "Selin", 3, "asda", "asdd","highasdasdaschool","asdasd");
         displayCV(conn, 2);
-        editCV(conn, 1, "Sait dogru", "programming", "5 years", "Bachelor's degree", "xxxxx");
+        editCV(conn, 2, "asda dogru", "programming", "5 years", "Bachelor's degree", "xxxxx");
         displayCV(conn, 2);
+
+        deleteCV(conn,2);
         displayCVList(conn);
         Scanner scan = new Scanner(System.in);
         System.out.print("Enter the ID of the CV that you want to display: ");
@@ -54,7 +114,7 @@ public class Main {
         }
     }
     public static void displayCV(Connection conn, int id) {
-        String sql1 = "SELECT * FROM cv WHERE ID = ?";
+        String sql1 = "SELECT  name,skill,experience,education,address FROM cv WHERE ID = ?";
 
 
         try (PreparedStatement pstmt = conn.prepareStatement(sql1)) {
@@ -63,7 +123,6 @@ public class Main {
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
                     System.out.println(rs.getString("name") + "    " +
-                            rs.getInt("ID") + "   " +
                             rs.getString("skill")+ "   " +
                             rs.getString("experience")+ "   " +
                             rs.getString("education")+ "   " +
@@ -105,7 +164,7 @@ public class Main {
     }
 
     public static void selectCV(Connection conn, int id) {
-        String sql = "SELECT * FROM cv WHERE ID = ?";
+        String sql = "SELECT name,skill,experience,education,address FROM cv WHERE ID = ?";
 
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, id);
@@ -113,7 +172,6 @@ public class Main {
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
                     System.out.println(rs.getString("name") + "    " +
-                            rs.getInt("ID") + "   " +
                             rs.getString("skill") + "   " +
                             rs.getString("experience") + "   " +
                             rs.getString("education")+ "   " +
@@ -126,7 +184,41 @@ public class Main {
             System.out.println(e.getMessage());
         }
     }
+    public void importDataToDatabase(String name, int ID, String skill, String education, String experience) {
+        Connection conn = null;
+        try {
 
+            String sql = "INSERT INTO CV (name, ID, skill, education, experience) ";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+
+            pstmt.setString(1, name);
+            pstmt.setInt(2, ID);
+            pstmt.setString(3, skill);
+            pstmt.setString(4, education);
+            pstmt.setString(5, experience);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+    public static void deleteCV(Connection conn, int id) {
+        String sql = "DELETE FROM cv WHERE ID = ?";
+
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, id);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 
 
 }
