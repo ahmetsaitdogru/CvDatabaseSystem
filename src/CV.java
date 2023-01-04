@@ -9,17 +9,20 @@ public class CV<AnyType> {
     private String experience;
     private String education;
 
-    private void setName(String name){
+    public String address;
+
+
+    public void setName(String name){
         this.name=name;
     }
-    private String getName() {return name;}
+    public String getName() {return name;}
 
-    private void setID(int id){
+    public void setID(int id){
         if (ID<1)
             ID=1;
         this.ID=id;
     }
-    private int getID() {return ID;}
+    public int getID() {return ID;}
 
     private void setSkill(String skill){
         this.skill=skill;
@@ -36,12 +39,20 @@ public class CV<AnyType> {
     }
     public String getExperience() {return experience;}
 
+    public String getAddress() {return address;}
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+
+
     public CV(){
        setName("Blank");
        setID(1);
        setSkill("Blank");
        setEducation("Blank");
        setExperience("Blank");
+       setAddress("b");
     }
 
     public CV(String name, int id, String skill, String education, String experience){
@@ -50,10 +61,11 @@ public class CV<AnyType> {
         skill=getSkill();
         education=getEducation();
         experience=getExperience();
+        address=getAddress();
     }
 
     public void createCV(){
-        String name1; int id1; String skill1; String education1; String experience1;
+        String name1; int id1; String skill1; String education1; String experience1; String ad1;
 
         System.out.println("Please enter name:");
         name1=scanner.next();
@@ -74,6 +86,10 @@ public class CV<AnyType> {
         System.out.println("Please enter experience:");
         experience1=scanner.next();
         setExperience(experience1);
+
+        System.out.println("Please enter address:");
+        ad1=scanner.next();
+        setAddress(ad1);
     }
 
     public CV[] array;
