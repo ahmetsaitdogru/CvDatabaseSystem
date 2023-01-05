@@ -1,7 +1,7 @@
 import java.util.Scanner;
 public class CV<AnyType> {
+    Scanner scanner = new Scanner(System.in);
 
-    Scanner scanner=new Scanner(System.in);
 
     private String name;
     private int ID;
@@ -24,10 +24,10 @@ public class CV<AnyType> {
     }
     public int getID() {return ID;}
 
-    private void setSkill(String skill){
+    public void setSkill(String skill){
         this.skill=skill;
     }
-    private String getSkill() {return skill;}
+    public String getSkill() {return skill;}
 
     public void setEducation(String education) {
         this.education = education;
@@ -46,7 +46,7 @@ public class CV<AnyType> {
 
 
 
-    public CV(){
+    public CV(int ID, String name, String skill, String experience, String education, String address){
        setName("Blank");
        setID(1);
        setSkill("Blank");
@@ -68,6 +68,7 @@ public class CV<AnyType> {
         String name1; int id1; String skill1; String education1; String experience1; String ad1;
 
         System.out.println("Please enter name:");
+
         name1=scanner.next();
         setName(name1);
 
