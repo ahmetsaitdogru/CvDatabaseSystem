@@ -20,6 +20,12 @@ public class Main {
 
     public static void main(String[] args) {
 
+
+            LoginPage login = new LoginPage();
+            login.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+
+
         String url= "jdbc:sqlite:D://sqlitedb/CvDatabase.db";
         Connection conn = null;
 
@@ -79,17 +85,13 @@ public class Main {
 
 
 
-        insertCV(conn, "zilan", 4, "asda", "asdd","highasdasdaschool","asdasd");
+        insertCV(conn, "zilan", 2, "asda", "asdd","highasdasdaschool","asdasd", 2);
+        insertCV(conn, "Ahmet", 1, "asda", "asdd","highasdasdaschool","asdasd" ,1);
 
 
 
 
-        insertCV(conn, "Selin", 3, "asda", "asdd","highasdasdaschool","asdasd");
-        displayCV(conn, 2);
-        editCV(conn, 2, "asda dogru", "programming", "5 years", "Bachelor's degree", "xxxxx");
-        displayCV(conn, 2);
 
-        deleteCV(conn,2);
         displayCVList(conn);
         Scanner scan = new Scanner(System.in);
         System.out.print("Enter the ID of the CV that you want to display: ");
@@ -97,8 +99,8 @@ public class Main {
         selectCV(conn, id);
 
     }
-    public static void insertCV(Connection conn, String name, int ID, String skill, String experience, String education, String address) {
-        String sql = "INSERT INTO cv (name, ID,skill, experience, education, address ) VALUES (?, ?,?,?,?,?)";
+    public static void insertCV(Connection conn, String name, int ID, String skill, String experience, String education, String address, int userId) {
+        String sql = "INSERT INTO cv (name, ID,skill, experience, education, address , userId) VALUES (?, ?,?,?,?,?,?)";
 
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, name);
@@ -107,6 +109,7 @@ public class Main {
             pstmt.setString(4, experience);
             pstmt.setString(5, education);
             pstmt.setString(6, address);
+            pstmt.setInt(7, userId);
 
             pstmt.executeUpdate();
         } catch (SQLException e) {
@@ -219,6 +222,78 @@ public class Main {
             System.out.println(e.getMessage());
         }
     }
+    public static CV retrieveCVFromDatabase(int ID) {
+        CV cv = null;
+
+        Connection conn = null;
+        Statement stmt = null;
+        try {
+
+            String sql;
+            sql = "SELECT * FROM CVs WHERE ID=" + ID;
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                int cvId = rs.getInt("ID");
+                String name = rs.getString("name");
+                String skill = rs.getString("skill");
+                String experience = rs.getString("experience");
+                String education = rs.getString("education");
+                String address = rs.getString("address");
+                cv = new CV(ID, name, skill, experience, education, address);
+            }
+            rs.close();
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+            } catch (SQLException se2) {
+            }
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException se) {
+                se.printStackTrace();
+            }
+        }
+
+        return cv;
+    }
+    public static void deleteCVFromDatabase(int cvId) {
+        Connection conn = null;
+        Statement stmt = null;
+        try {
+
+            stmt = conn.createStatement();
+            String sql;
+            sql = "DELETE FROM CVs WHERE id=" + cvId;
+            stmt.executeUpdate(sql);
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+            } catch (SQLException se2) {
+            }
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException se) {
+                se.printStackTrace();
+            }
+        }
+    }
+
 
 
 }
